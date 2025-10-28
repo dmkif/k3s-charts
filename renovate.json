@@ -1,0 +1,37 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "packageRules": [
+    {
+      "matchDatasources": ["helm"],
+      "matchPackageNames": ["traefik"],
+      "groupName": "traefik",
+      "automerge": false,
+      "schedule": ["every weekend"],
+      "prCreation": "immediate",
+      "commitMessagePrefix": "chore(traefik):",
+      "commitMessageTopic": "Update Traefik chart to {{newVersion}}",
+      "prTitle": "Update Traefik chart from {{currentVersion}} to {{newVersion}}",
+      "prBodyTemplate": "This PR updates the Traefik Helm chart from `{{currentVersion}}` to `{{newVersion}}`.\n\n### Changes\n- Updates `packages/traefik/package.yaml` with new chart URL\n- Existing patches in `packages/traefik/generated-changes/` will be automatically applied\n- Charts will be rebuilt with `make charts` in CI\n\n### Testing\nThe CI workflow will:\n1. Run `make prepare` to apply patches to the new version\n2. Run `make validate` to ensure patches apply cleanly\n3. Run `make charts` to generate final chart packages\n\nPlease review the generated charts before merging.\n\n---\n{{#if isVulnerabilityAlert}}\n### Vulnerability Information\n{{vulnerabilitySeverity}}: {{vulnerabilityDescription}}\n{{/if}}"
+    }
+  ],
+  "helm-values": {
+    "fileMatch": ["packages/.*/package\\.yaml$"]
+  },
+  "regexManagers": [
+    {
+      "fileMatch": ["^packages/traefik/package\\.yaml$"],
+      "matchStrings": [
+        "url:\\s*https://traefik\\.github\\.io/charts/traefik/traefik-(?<currentValue>[0-9.]+)\\.tgz"
+      ],
+      "datasourceTemplate": "helm",
+      "depNameTemplate": "traefik",
+      "registryUrlTemplate": "https://traefik.github.io/charts"
+    }
+  ],
+  "prConcurrentLimit": 3,
+  "separateMinorPatch": true,
+  "rangeStrategy": "replace"
+}

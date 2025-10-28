@@ -1,0 +1,79 @@
+name: Renovate Chart Updates
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'packages/*/package.yaml'
+
+jobs:
+  build-charts:
+    runs-on: ubuntu-latest
+    # Only run on Renovate PRs
+    if: github.actor == 'renovate[bot]'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup environment
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y yq
+
+      - name: Pull build scripts
+        run: sudo make pull-scripts
+
+      - name: Validate patches apply cleanly
+        id: validate
+        run: |
+          echo "Running make prepare to test if patches apply..."
+          if sudo make prepare; then
+            echo "✅ Patches applied successfully"
+            echo "patches_valid=true" >> $GITHUB_OUTPUT
+          else
+            echo "❌ Patches failed to apply - manual intervention needed"
+            echo "patches_valid=false" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+
+      - name: Generate charts
+        if: steps.validate.outputs.patches_valid == 'true'
+        run: |
+          echo "Running make charts to generate final packages..."
+          sudo make charts
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          git diff --exit-code || echo "changes=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push generated charts
+        if: steps.git-check.outputs.changes == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add charts/ assets/ index.yaml
+          git commit -m "chore: Generate charts for updated packages [skip ci]"
+          git push
+
+      - name: Add validation comment
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const success = '${{ steps.validate.outputs.patches_valid }}' === 'true';
+            const body = success
+              ? '✅ **Build Successful**\n\nPatches applied cleanly and charts were generated successfully.\n\nGenerated files have been committed to this PR.'
+              : '❌ **Build Failed**\n\nPatches could not be applied to the new chart version.\n\nPlease review the patches in `packages/*/generated-changes/patch/` and update them manually.';
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
