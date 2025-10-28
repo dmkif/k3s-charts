@@ -24,11 +24,12 @@
     {
       "fileMatch": ["^packages/traefik/package\\.yaml$"],
       "matchStrings": [
-        "url:\\s*https://traefik\\.github\\.io/charts/traefik/traefik-(?<currentValue>[0-9.]+)\\.tgz"
+        "url:\\s*https://traefik\\.github\\.io/charts/traefik/traefik-(?<currentValue>[0-9.]+)\\.tgz\\npackageVersion:\\s*(?<currentDigest>\\d+)"
       ],
       "datasourceTemplate": "helm",
       "depNameTemplate": "traefik",
-      "registryUrlTemplate": "https://traefik.github.io/charts"
+      "registryUrlTemplate": "https://traefik.github.io/charts",
+      "autoReplaceStringTemplate": "url: https://traefik.github.io/charts/traefik/traefik-{{newValue}}.tgz\npackageVersion: 01"
     }
   ],
   "prConcurrentLimit": 3,
