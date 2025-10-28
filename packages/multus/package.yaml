@@ -1,2 +1,3 @@
 url: https://github.com/rancher/rke2-charts/raw/main/assets/rke2-multus/rke2-multus-v4.0.2-build2024020802.tgz
-packageVersion: 01
+# Override version to remove 'v' prefix from upstream for valid semver
+version: 4.0.201+up4.0.2-build2024020802
