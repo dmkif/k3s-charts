@@ -18,7 +18,7 @@ rm -rf ../bin
 cd ..
 
 mkdir -p bin
-ARCH=$(go version | cut -d' ' -f4 | sed 's/\//_/')
+ARCH=$(go version | awk '{print $NF}' | sed 's/\//_/')
 BINARY_NAME=charts-build-scripts_${ARCH}
 curl -sfL ${CHARTS_BUILD_SCRIPTS_REPO%.git}/releases/download/${CHARTS_BUILD_SCRIPT_VERSION}/${BINARY_NAME} --output bin/charts-build-scripts
 if ! [[ -f bin/charts-build-scripts ]]; then
