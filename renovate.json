@@ -33,7 +33,7 @@
     {
       "fileMatch": ["^packages/traefik/package\\.yaml$"],
       "matchStrings": [
-        "url:\\s*https://traefik\\.github\\.io/charts/traefik/traefik-(?<currentValue>[0-9.]+)\\.tgz\\npackageVersion:\\s*(?<currentDigest>\\d+)"
+        "url:\\s*https://traefik\\.github\\.io/charts/traefik/traefik-(?<currentValue>[0-9.]+)\\.tgz\\npackageVersion:\\s*\\d+"
       ],
       "datasourceTemplate": "helm",
       "depNameTemplate": "traefik",
