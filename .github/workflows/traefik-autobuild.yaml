@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   build:
-    if: github.event.pull_request.head.repo.full_name == github.repository && github.actor == 'renovate[bot]'
+    if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
 
     steps:
@@ -40,10 +40,8 @@ jobs:
           set -euo pipefail
           export PACKAGE=traefik
           # Always use semantic patching for new upstream versions.
-          # Keep the repo clean/idempotent by restoring original patch dir afterwards.
-          patch_backup="$(mktemp -d)"
           if [ -d packages/traefik/generated-changes/patch ]; then
-            mv packages/traefik/generated-changes/patch "$patch_backup/patch"
+            rm -rf packages/traefik/generated-changes/patch
             mkdir -p packages/traefik/generated-changes/patch
           fi
           make prepare
@@ -59,10 +57,16 @@ jobs:
           make patch
           make clean
           make charts
-          if [ -d "$patch_backup/patch" ]; then
-            rm -rf packages/traefik/generated-changes/patch
-            mv "$patch_backup/patch" packages/traefik/generated-changes/patch
-          fi
+
+      - name: Commit chart artifacts
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(traefik): rebuild chart artifacts"
+          branch: ${{ github.head_ref }}
+
+      - name: Validate
+        run: |
+          sudo make validate
 
       - name: Commit chart artifacts
         uses: stefanzweifel/git-auto-commit-action@v5
