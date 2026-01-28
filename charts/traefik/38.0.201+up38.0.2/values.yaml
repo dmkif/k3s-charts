@@ -7,7 +7,7 @@ image: # @schema additionalProperties: false
   repository: rancher/mirrored-library-traefik
   # -- defaults to appVersion. It's used for version checking, even prefixed with experimental- or latest-.
   # When a digest is required, `versionOverride` can be used to set the version.
-  tag: "v3.6.6"
+  tag: "3.6.7"
   # -- Traefik image pull policy
   pullPolicy: IfNotPresent
 # -- Add additional label to all resources
