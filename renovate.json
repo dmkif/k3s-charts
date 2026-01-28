@@ -5,6 +5,15 @@
   ],
   "packageRules": [
     {
+      "matchDatasources": ["docker"],
+      "matchPackageNames": [
+        "traefik",
+        "docker.io/traefik",
+        "rancher/mirrored-library-traefik"
+      ],
+      "enabled": false
+    },
+    {
       "matchDatasources": ["helm"],
       "matchPackageNames": ["traefik"],
       "groupName": "traefik",
