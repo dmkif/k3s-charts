@@ -72,6 +72,18 @@ For more information on how to do this or why this is required, please see [`doc
 
 Otherwise, you are ready to make a PR!
 
+### Traefik Update Helper (OBS)
+
+For Traefik updates, use `update-traefik-from-obs` to sync the chart version with OBS and run the build workflow. It updates `packages/traefik/package.yaml`, handles patch conflicts via semantic patching, and rebuilds charts.
+
+```bash
+./update-traefik-from-obs k3s-charts-*.tar.xz
+./update-traefik-from-obs -y k3s-charts-*.tar.xz
+./update-traefik-from-obs -r -y k3s-charts-*.tar.xz
+```
+
+Use `--force-regenerate` (`-r`) for major version updates to always apply semantic patching.
+
 ### Rebasing An Existing Package
 
 For forked charts only (e.g. any chart where the `package.yaml` does not have `url: local`), currently the scripts do not have good support for rebasing charts to a new upstream. 
