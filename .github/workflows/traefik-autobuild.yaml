@@ -27,15 +27,25 @@ jobs:
           go-version: "1.25"
 
       - name: Install build dependencies
-        run: sudo apt-get update && sudo apt-get install -y make curl tar xz-utils jq
+        run: |
+          sudo apt-get update && sudo apt-get install -y make curl tar xz-utils jq
+          sudo curl -sL -o /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.45.1/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
 
       - name: Pull scripts
         run: make pull-scripts
 
       - name: Build Traefik package
         run: |
+          set -euo pipefail
           export PACKAGE=traefik
-          make prepare
+          # Always use semantic patching for new upstream versions.
+          chart_url="$(yq -r '.url' packages/traefik/package.yaml)"
+          rm -rf packages/traefik/charts
+          mkdir -p packages/traefik/charts
+          curl -sL "$chart_url" | tar -xz -C packages/traefik/charts --strip-components=1
+          traefik_version="$(yq -r '.appVersion' packages/traefik/charts/Chart.yaml)"
+          ./packages/traefik/k3s-patches.sh packages/traefik/charts "$traefik_version"
           make patch
           make clean
           make charts
