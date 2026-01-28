@@ -40,12 +40,22 @@ jobs:
           set -euo pipefail
           export PACKAGE=traefik
           # Always use semantic patching for new upstream versions.
-          chart_url="$(yq -r '.url' packages/traefik/package.yaml)"
-          rm -rf packages/traefik/charts
-          mkdir -p packages/traefik/charts
-          curl -sL "$chart_url" | tar -xz -C packages/traefik/charts --strip-components=1
+          # Skip applying legacy patch files during prepare to avoid failures on new upstream changes.
+          patch_backup="$(mktemp -d)"
+          if [ -d packages/traefik/generated-changes/patch ]; then
+            mv packages/traefik/generated-changes/patch "$patch_backup/patch"
+            mkdir -p packages/traefik/generated-changes/patch
+          fi
+          make prepare
           traefik_version="$(yq -r '.appVersion' packages/traefik/charts/Chart.yaml)"
           ./packages/traefik/k3s-patches.sh packages/traefik/charts "$traefik_version"
+          # charts-build-scripts expects this file when generating the CRD chart in newer upstreams.
+          if [ ! -f packages/traefik/charts/templates/validate-install-crd.yaml ]; then
+            mkdir -p packages/traefik/charts/templates
+            cat > packages/traefik/charts/templates/validate-install-crd.yaml <<'EOF'
+          {{- /* placeholder for charts-build-scripts CRD extraction; removed during patch */ -}}
+          EOF
+          fi
           make patch
           make clean
           make charts
