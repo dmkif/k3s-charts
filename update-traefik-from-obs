@@ -324,8 +324,8 @@ Patch Handling:
   patch script (packages/traefik/k3s-patches.sh) which applies changes based on
   their meaning rather than line positions.
 
-  Use --force-regenerate to always use semantic patching, which is recommended
-  when updating across major version bumps.
+  Semantic patching is enabled by default. Use --force-regenerate to make this
+  explicit in logs or when reading historical usage notes.
 
 Example:
   $(basename "$0") k3s-charts-1754298670.5869b83.tar.xz
@@ -340,7 +340,7 @@ main() {
     local auto_yes=false
     local dry_run=false
     local keep_extracted=false
-    local force_regenerate=false
+    local force_regenerate=true
     local archive=""
 
     # Parse arguments
