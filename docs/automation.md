@@ -57,6 +57,26 @@ Die Patches in `packages/traefik/generated-changes/patch/` sind in der Regel ver
 4. Charts werden gebaut und committed
 5. **Manuell**: PR reviewen und mergen
 
+### Update per OBS-Helper (manuell)
+
+Für manuelle Updates steht `update-traefik-from-obs` bereit. Das Script
+zieht die Zielversion aus OBS, aktualisiert `packages/traefik/package.yaml`,
+führt den Build-Workflow aus und kümmert sich um Patch-Regeneration.
+
+**Patch Handling:**
+- Bestehende `.patch` Dateien können bei neuen Upstream-Versionen kollidieren.
+- Das Script versucht automatisch semantisches Patching via
+  `packages/traefik/k3s-patches.sh`.
+- Mit `--force-regenerate` wird semantisches Patching immer verwendet
+  (empfohlen bei Major-Versionen).
+
+**Beispiele:**
+```bash
+./update-traefik-from-obs k3s-charts-1754298670.5869b83.tar.xz
+./update-traefik-from-obs -y k3s-charts-1754298670.5869b83.tar.xz
+./update-traefik-from-obs -r -y k3s-charts-1754298670.5869b83.tar.xz
+```
+
 ### Patch-Konflikte (10% der Fälle)
 
 Wenn die Patches nicht mehr kompatibel sind:
