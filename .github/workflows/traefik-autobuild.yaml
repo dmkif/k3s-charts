@@ -1,0 +1,46 @@
+name: Traefik PR autobuild
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "packages/traefik/package.yaml"
+      - "packages/traefik/**"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  build:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+
+      - name: Install build dependencies
+        run: sudo apt-get update && sudo apt-get install -y make curl tar xz-utils jq
+
+      - name: Pull scripts
+        run: make pull-scripts
+
+      - name: Build Traefik package
+        run: |
+          export PACKAGE=traefik
+          make prepare
+          make patch
+          make clean
+          make charts
+
+      - name: Commit chart artifacts
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(traefik): rebuild chart artifacts"
