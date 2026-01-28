@@ -57,6 +57,9 @@ Die Patches in `packages/traefik/generated-changes/patch/` sind in der Regel ver
 4. Charts werden gebaut und committed
 5. **Manuell**: PR reviewen und mergen
 
+**Hinweis:** Für Renovate-PRs zu Traefik werden die Chart-Artefakte automatisch
+durch die GitHub Action `traefik-autobuild` gebaut und in den PR zurückgeschrieben.
+
 ### Update per OBS-Helper (manuell)
 
 Für manuelle Updates steht `update-traefik-from-obs` bereit. Das Script
