@@ -21,7 +21,7 @@
 set -euo pipefail
 
 # Configuration
-DEFAULT_TRAEFIK_VERSION="v3.4.3"
+DEFAULT_TRAEFIK_VERSION="v3.6.12"
 IMAGE_REPOSITORY="rancher/mirrored-library-traefik"
 
 # Colors

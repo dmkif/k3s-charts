@@ -70,6 +70,35 @@ entries:
     version: 1.6.1+up1.6.0
   traefik:
   - annotations:
+      artifacthub.io/changes: "- \"feat(deps): update traefik docker tag to v3.6.12
+        (v39.0)\"\n- \"chore(release): \U0001F680 publish v39.0.7\"\n"
+    apiVersion: v2
+    appVersion: v3.6.12
+    created: "2026-04-08T15:02:14.423776683+02:00"
+    description: A Traefik based Kubernetes ingress controller
+    digest: 4d469f5005d13df5629cc355ae82964621ed1d42759a667bc6277d81e0b79933
+    home: https://traefik.io/
+    icon: https://raw.githubusercontent.com/traefik/traefik/master/docs/content/assets/img/traefik.logo.png
+    keywords:
+    - traefik
+    - ingress
+    - networking
+    kubeVersion: '>=1.22.0-0'
+    maintainers:
+    - email: michel.loiseleur@traefik.io
+      name: mloiseleur
+    - email: remi.buisson@traefik.io
+      name: darkweaver87
+    - name: jnoordsij
+    name: traefik
+    sources:
+    - https://github.com/traefik/traefik-helm-chart
+    - https://github.com/traefik/traefik
+    type: application
+    urls:
+    - assets/traefik/traefik-39.0.701+up39.0.7.tgz
+    version: 39.0.701+up39.0.7
+  - annotations:
       artifacthub.io/changes: "- \"refactor(chart): clean output on Deployment & Daemonset\"\n-
         \"fix(security)!: add support for request path options of Traefik 3.6.7+\"\n-
         \"fix(ports)!: \U0001F41B entrypoints `http` options\"\n- \"feat(gateway-api):
@@ -471,6 +500,18 @@ entries:
     - assets/traefik/traefik-20.3.1+up20.3.0.tgz
     version: 20.3.1+up20.3.0
   traefik-crd:
+  - annotations:
+      fleet.cattle.io/bundle-id: k3s
+    apiVersion: v1
+    appVersion: v3.6.12
+    created: "2026-04-08T15:02:14.451399681+02:00"
+    description: Installs the CRDs for traefik
+    digest: 3ece045917e37eb6f44aee4ee3ae58b2e7ed6a016fcdacc75ff87875fd155590
+    name: traefik-crd
+    type: application
+    urls:
+    - assets/traefik-crd/traefik-crd-39.0.701+up39.0.7.tgz
+    version: 39.0.701+up39.0.7
   - annotations:
       fleet.cattle.io/bundle-id: k3s
     apiVersion: v1
