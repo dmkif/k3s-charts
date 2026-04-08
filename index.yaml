@@ -70,6 +70,35 @@ entries:
     version: 1.6.1+up1.6.0
   traefik:
   - annotations:
+      artifacthub.io/changes: "- \"feat(deps): update traefik docker tag to v3.6.12
+        (v39.0)\"\n- \"chore(release): \U0001F680 publish v39.0.7\"\n"
+    apiVersion: v2
+    appVersion: v3.6.12
+    created: "2026-04-08T12:47:42.041891228Z"
+    description: A Traefik based Kubernetes ingress controller
+    digest: 1c3f3bc481078675539e02ec5cb06436b48738c4d6e0659b3a5d57ea66bc05eb
+    home: https://traefik.io/
+    icon: https://raw.githubusercontent.com/traefik/traefik/master/docs/content/assets/img/traefik.logo.png
+    keywords:
+    - traefik
+    - ingress
+    - networking
+    kubeVersion: '>=1.22.0-0'
+    maintainers:
+    - email: michel.loiseleur@traefik.io
+      name: mloiseleur
+    - email: remi.buisson@traefik.io
+      name: darkweaver87
+    - name: jnoordsij
+    name: traefik
+    sources:
+    - https://github.com/traefik/traefik-helm-chart
+    - https://github.com/traefik/traefik
+    type: application
+    urls:
+    - assets/traefik/traefik-39.0.701+up39.0.7.tgz
+    version: 39.0.701+up39.0.7
+  - annotations:
       artifacthub.io/changes: "- \"refactor(chart): clean output on Deployment & Daemonset\"\n-
         \"fix(security)!: add support for request path options of Traefik 3.6.7+\"\n-
         \"fix(ports)!: \U0001F41B entrypoints `http` options\"\n- \"feat(gateway-api):
@@ -471,6 +500,18 @@ entries:
     - assets/traefik/traefik-20.3.1+up20.3.0.tgz
     version: 20.3.1+up20.3.0
   traefik-crd:
+  - annotations:
+      fleet.cattle.io/bundle-id: k3s
+    apiVersion: v1
+    appVersion: v3.6.12
+    created: "2026-04-08T12:47:42.0671867Z"
+    description: Installs the CRDs for traefik
+    digest: d457c0a47a45ed713c81b4d1f63b6c09304d328b0b3179586169004e5d17230e
+    name: traefik-crd
+    type: application
+    urls:
+    - assets/traefik-crd/traefik-crd-39.0.701+up39.0.7.tgz
+    version: 39.0.701+up39.0.7
   - annotations:
       fleet.cattle.io/bundle-id: k3s
     apiVersion: v1
