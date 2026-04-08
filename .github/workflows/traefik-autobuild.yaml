@@ -59,7 +59,7 @@ jobs:
           make charts
 
       - name: Commit chart artifacts
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "chore(traefik): rebuild chart artifacts"
           branch: ${{ github.head_ref }}
@@ -69,6 +69,6 @@ jobs:
           sudo make validate
 
       - name: Commit chart artifacts
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "chore(traefik): rebuild chart artifacts"
